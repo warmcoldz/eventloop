@@ -1,4 +1,5 @@
 #include "event_loop.h"
+#include "timer_handler.h"
 
 #include <iostream>
 
@@ -7,7 +8,7 @@ using namespace std::chrono_literals;
 class MyTimerHandler : public event_loop::ITimerHandler
 {
 public:
-    void Handle(event_loop::ITimer* eventLoop) override final
+    void Handle(event_loop::Timer* timer) noexcept override final
     {
         ++calledTimes;
         std::cout << "MyTimerHandler::Handle" << std::endl;
@@ -16,7 +17,7 @@ public:
         if (calledTimes == kMaxTimes)
             return;
 
-        eventLoop->Start(this, 1000ms);
+        timer->Start(this, 1000ms);
     }
 
 private:
@@ -28,8 +29,8 @@ int main()
     MyTimerHandler handler;
 
     event_loop::EventLoop ev;
-    const std::shared_ptr<event_loop::ITimer> timer = ev.CreateTimer();
-    timer->Start(&handler, 2000ms);
+    event_loop::Timer timer = ev.CreateTimer();
+    timer.Start(&handler, 3000ms);
 
     ev.Run();
 
