@@ -1,2 +1,2 @@
 add_executable(main_test main.cpp)
-target_link_libraries(main_test eventloop)
+target_link_libraries(main_test velocizzio_lib)

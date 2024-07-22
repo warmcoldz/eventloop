@@ -4,7 +4,7 @@
 
 #include <chrono>
 
-namespace event_loop {
+namespace velocizzio {
 
 class IEventLoopInternalController
 {
@@ -16,4 +16,4 @@ public:
     virtual ~IEventLoopInternalController() = default;
 };
 
-} // namespace event_loop
+} // namespace velocizzio

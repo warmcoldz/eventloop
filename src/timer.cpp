@@ -1,6 +1,6 @@
-#include "timer.h"
+#include <velocizzio/timer.h>
 
-namespace event_loop {
+namespace velocizzio {
 
 Timer::Timer(IEventLoopInternalController& ev, std::shared_ptr<ITimerHandler> handler)
     : ev_{ ev }
@@ -58,4 +58,4 @@ std::chrono::system_clock::time_point Timer::GetExpirationTime() const
     return expirationTime_;
 }
 
-} // namespace event_loop
+} // namespace velocizzio

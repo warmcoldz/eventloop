@@ -1,17 +1,19 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(turboquic)
+project(velocizzio)
 set(CMAKE_CXX_STANDARD 23)
 
-add_library(eventloop
-    event_loop_internal_controller.h
-    event_loop.cpp
-    event_loop.h
-    timer_handler.h
-    timer_internal_controller.h
-    timer.cpp
-    timer.h
+add_library(velocizzio_lib
+    include/velocizzio/event_loop.h
+    include/velocizzio/timer_handler.h
+    include/velocizzio/timer.h
+
+    include/velocizzio/detail/event_loop_internal_controller.h
+    include/velocizzio/detail/timer_internal_controller.h
+
+    src/event_loop.cpp
+    src/timer.cpp
 )
 
-target_include_directories(eventloop PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(velocizzio_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_subdirectory(examples)

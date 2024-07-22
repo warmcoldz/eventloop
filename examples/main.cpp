@@ -1,14 +1,12 @@
-#include "event_loop.h"
-#include "timer_handler.h"
-
+#include <velocizzio/event_loop.h>
 #include <iostream>
 
 using namespace std::chrono_literals;
 
-class MyTimerHandler : public event_loop::ITimerHandler
+class MyTimerHandler : public velocizzio::ITimerHandler
 {
 public:
-    void Handle(event_loop::Timer* timer) noexcept override final
+    void Handle(velocizzio::Timer* timer) noexcept override final
     {
         ++calledTimes;
         std::cout << "MyTimerHandler::Handle" << std::endl;
@@ -26,11 +24,10 @@ private:
 
 int main()
 {
-    event_loop::EventLoop ev;
+    velocizzio::EventLoop ev;
+    velocizzio::Timer timer = ev.CreateTimer(std::make_shared<MyTimerHandler>());
 
-    event_loop::Timer timer = ev.CreateTimer(std::make_shared<MyTimerHandler>());
     timer.Start(500ms);
-
     ev.Run();
 
     return 0;

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "timer_internal_controller.h"
+#include "detail/timer_internal_controller.h"
+#include "detail/event_loop_internal_controller.h"
 #include "timer_handler.h"
-#include "event_loop_internal_controller.h"
 
 #include <chrono>
 #include <memory>
 
-namespace event_loop {
+namespace velocizzio {
 
 class Timer : public ITimerInternalController
 {
@@ -32,4 +32,4 @@ private:
     std::chrono::system_clock::time_point expirationTime_;
 };
 
-} // namespace event_loop
+} // namespace velocizzio
