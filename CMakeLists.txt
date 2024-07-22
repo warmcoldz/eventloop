@@ -15,5 +15,7 @@ add_library(velocizzio_lib
     src/timer.cpp
 )
 
+target_include_directories(velocizzio_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/velocizzio)
 target_include_directories(velocizzio_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 add_subdirectory(examples)
