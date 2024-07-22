@@ -1,4 +1,4 @@
-# velozzIO
+# velocizzIO
 
 C++ event loop implementation
 
