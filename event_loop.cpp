@@ -18,9 +18,9 @@ EventLoop::EventLoop()
 {
 }
 
-Timer EventLoop::CreateTimer()
+Timer EventLoop::CreateTimer(std::shared_ptr<ITimerHandler> handler)
 {
-    return Timer{ *this };
+    return Timer{ *this, std::move(handler) };
 }
 
 void EventLoop::Run()
@@ -72,7 +72,7 @@ void EventLoop::CheckTimersExpired()
             break;
 
         ITimerInternalController* const timer = it->second;
-        timer->ExpireTimer();
+        timer->Expire();
         it = timers_.erase(it);
     }
 }

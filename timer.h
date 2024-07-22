@@ -12,20 +12,23 @@ namespace event_loop {
 class Timer : public ITimerInternalController
 {
 public:
-    explicit Timer(IEventLoopInternalController& ev);
+    Timer(IEventLoopInternalController& ev, std::shared_ptr<ITimerHandler> timerHandler);
     ~Timer();
 
+    void Start(std::chrono::milliseconds timeout);
     void Start(std::shared_ptr<ITimerHandler> timerHandler, std::chrono::milliseconds timeout);
     void Stop();
 
 private:
-    void ExpireTimer() override final;
+    void Expire() override final;
     std::chrono::system_clock::time_point GetExpirationTime() const override final;
+
+    void AddTimer(std::chrono::milliseconds timeout);
 
 private:
     IEventLoopInternalController& ev_;
-    bool running_{ false };
     std::shared_ptr<ITimerHandler> handler_{ nullptr };
+    bool running_{ false };
     std::chrono::system_clock::time_point expirationTime_;
 };
 
