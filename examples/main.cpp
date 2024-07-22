@@ -5,7 +5,9 @@
 
 using namespace std::chrono_literals;
 
-class MyTimerHandler : public event_loop::ITimerHandler
+class MyTimerHandler
+    : public event_loop::ITimerHandler
+    , public std::enable_shared_from_this<MyTimerHandler>
 {
 public:
     void Handle(event_loop::Timer* timer) noexcept override final
@@ -17,7 +19,7 @@ public:
         if (calledTimes == kMaxTimes)
             return;
 
-        timer->Start(this, 1000ms);
+        timer->Start(shared_from_this(), 1000ms);
     }
 
 private:
@@ -26,11 +28,10 @@ private:
 
 int main()
 {
-    MyTimerHandler handler;
-
     event_loop::EventLoop ev;
+
     event_loop::Timer timer = ev.CreateTimer();
-    timer.Start(&handler, 3000ms);
+    timer.Start(std::make_shared<MyTimerHandler>(), 3000ms);
 
     ev.Run();
 
