@@ -7,21 +7,33 @@ Timer::Timer(IEventLoopController& ev)
 {
 }
 
-void Timer::Start(ITimerHandler* const timeHandler, const std::chrono::milliseconds timeout)
+Timer::~Timer()
 {
-    handler_ = timeHandler;
+    Stop();
+}
+
+void Timer::Start(std::shared_ptr<ITimerHandler> timerHandler, const std::chrono::milliseconds timeout)
+{
+    Stop();
+
+    handler_ = std::move(timerHandler);
     expirationTime_ = ev_.CurrentTime() + timeout;
     ev_.AddTimer(this);
+    running_ = true;
+}
+
+void Timer::ExpireTimer()
+{
+    running_ = false;
+    handler_->Handle(this);
 }
 
 void Timer::Stop()
 {
-    ev_.RemoveTimer(this);
-}
+    if (!running_)
+        return;
 
-ITimerHandler* Timer::GetTimerHandler() const
-{
-    return handler_;
+    ev_.RemoveTimer(this);
 }
 
 std::chrono::system_clock::time_point Timer::GetExpirationTime() const

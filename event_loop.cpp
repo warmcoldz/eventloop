@@ -1,6 +1,7 @@
 #include "event_loop.h"
 
 #include <thread>
+#include <queue>
 
 namespace event_loop {
 
@@ -68,7 +69,7 @@ void EventLoop::CheckTimersExpired()
             break;
 
         Timer* const timer = it->second;
-        timer->GetTimerHandler()->Handle(timer);
+        timer->ExpireTimer();
         it = timers_.erase(it);
     }
 }
