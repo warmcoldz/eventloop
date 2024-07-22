@@ -7,7 +7,7 @@ using namespace std::chrono_literals;
 class MyTimerHandler : public event_loop::ITimerHandler
 {
 public:
-    void Handle(event_loop::ITimer* eventLoop) override final
+    void Handle(event_loop::Timer* eventLoop) override final
     {
         ++calledTimes;
         std::cout << "MyTimerHandler::Handle" << std::endl;
@@ -28,8 +28,8 @@ int main()
     MyTimerHandler handler;
 
     event_loop::EventLoop ev;
-    const std::shared_ptr<event_loop::ITimer> timer = ev.CreateTimer();
-    timer->Start(&handler, 2000ms);
+    event_loop::Timer timer = ev.CreateTimer();
+    timer.Start(&handler, 2000ms);
 
     ev.Run();
 
