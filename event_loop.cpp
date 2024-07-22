@@ -4,6 +4,14 @@
 #include <queue>
 
 namespace event_loop {
+namespace {
+
+std::chrono::system_clock::time_point TimeNow()
+{
+    return std::chrono::system_clock::now();
+}
+
+} // namespace
 
 EventLoop::EventLoop()
     : time_{ TimeNow() }
@@ -34,12 +42,12 @@ std::chrono::system_clock::time_point EventLoop::CurrentTime() const
     return time_;
 }
 
-void EventLoop::AddTimer(Timer* const timer)
+void EventLoop::AddTimer(ITimerInternalController* const timer)
 {
     timers_.emplace(timer->GetExpirationTime(), timer);
 }
 
-void EventLoop::RemoveTimer(Timer* const timer)
+void EventLoop::RemoveTimer(ITimerInternalController* const timer)
 {
     const std::chrono::system_clock::time_point expirationTime = timer->GetExpirationTime();
 
@@ -56,11 +64,6 @@ void EventLoop::RemoveTimer(Timer* const timer)
     }
 }
 
-std::chrono::system_clock::time_point EventLoop::TimeNow()
-{
-    return std::chrono::system_clock::now();
-}
-
 void EventLoop::CheckTimersExpired()
 {
     for (auto it = timers_.begin(); it != timers_.end();)
@@ -68,7 +71,7 @@ void EventLoop::CheckTimersExpired()
         if (time_ < it->first)
             break;
 
-        Timer* const timer = it->second;
+        ITimerInternalController* const timer = it->second;
         timer->ExpireTimer();
         it = timers_.erase(it);
     }

@@ -2,7 +2,7 @@
 
 namespace event_loop {
 
-Timer::Timer(IEventLoopController& ev)
+Timer::Timer(IEventLoopInternalController& ev)
     : ev_{ ev }
 {
 }
