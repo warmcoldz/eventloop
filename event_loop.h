@@ -13,7 +13,7 @@ class EventLoop : private IEventLoopInternalController
 public:
     EventLoop();
 
-    Timer CreateTimer();
+    Timer CreateTimer(std::shared_ptr<ITimerHandler> handler);
     void Run();
 
 private:
