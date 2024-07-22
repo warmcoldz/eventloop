@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace event_loop {
+namespace velocizzio {
 
 class ITimerInternalController
 {
@@ -13,4 +13,4 @@ public:
     virtual ~ITimerInternalController() = default;
 };
 
-} // namespace event_loop
+} // namespace velocizzio

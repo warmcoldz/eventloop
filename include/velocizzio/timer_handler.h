@@ -1,6 +1,6 @@
 #pragma once
 
-namespace event_loop {
+namespace velocizzio {
 
 class Timer;
 
@@ -12,4 +12,4 @@ public:
     virtual ~ITimerHandler() = default;
 };
 
-} // namespace event_loop
+} // namespace velocizzio

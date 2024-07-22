@@ -1,9 +1,8 @@
-#include "event_loop.h"
+#include <velocizzio/event_loop.h>
 
 #include <thread>
-#include <queue>
 
-namespace event_loop {
+namespace velocizzio {
 namespace {
 
 std::chrono::system_clock::time_point TimeNow()
@@ -89,4 +88,4 @@ std::chrono::system_clock::time_point EventLoop::EarliestTimerExpirationTime() c
     return timers_.begin()->first;
 }
 
-} // namespace event_loop
+} // namespace velocizzio
