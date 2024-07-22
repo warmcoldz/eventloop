@@ -11,8 +11,7 @@ EventLoop::EventLoop()
 
 Timer EventLoop::CreateTimer()
 {
-    IEventLoopController* const ev = this;
-    return Timer{ *ev };
+    return Timer{ *this };
 }
 
 void EventLoop::Run()

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "event_loop_controller.h"
 #include "timer.h"
+#include "event_loop_controller.h"
 
 #include <map>
 #include <chrono>
@@ -30,6 +30,8 @@ private:
 private:
     std::chrono::system_clock::time_point time_;
     std::multimap<std::chrono::system_clock::time_point /*expirationTime*/, Timer*> timers_;
+
+    friend class Timer;
 };
 
 } // namespace event_loop

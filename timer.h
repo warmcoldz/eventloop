@@ -1,7 +1,7 @@
 #pragma once
 
-#include "event_loop_controller.h"
 #include "timer_handler.h"
+#include "event_loop_controller.h"
 
 #include <chrono>
 
