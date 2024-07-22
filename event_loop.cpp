@@ -44,36 +44,38 @@ std::chrono::system_clock::time_point EventLoop::CurrentTime() const
 
 void EventLoop::AddTimer(ITimerInternalController* const timer)
 {
-    timers_.emplace(timer->GetExpirationTime(), timer);
+    const auto insertedIt = timers_.emplace(timer->GetExpirationTime(), timer);
+
+    try
+    {
+        timerPositions_.try_emplace(timer, insertedIt);
+    }
+    catch (const std::exception&)
+    {
+        timers_.erase(insertedIt);
+        throw;
+    }
 }
 
 void EventLoop::RemoveTimer(ITimerInternalController* const timer)
 {
-    const std::chrono::system_clock::time_point expirationTime = timer->GetExpirationTime();
-
-    const auto begin = timers_.lower_bound(expirationTime);
-    const auto end = timers_.upper_bound(expirationTime);
-
-    for (auto it = begin; it != end; ++it)
-    {
-        if (it->second == timer)
-        {
-            timers_.erase(it);
-            break;
-        }
-    }
+    auto it = timerPositions_.find(timer);
+    timers_.erase(it->second);
+    timerPositions_.erase(it);
 }
 
 void EventLoop::CheckTimersExpired()
 {
-    for (auto it = timers_.begin(); it != timers_.end();)
+    for (auto it = timers_.begin(); it != timers_.end(); it = timers_.begin())
     {
         if (time_ < it->first)
             break;
 
         ITimerInternalController* const timer = it->second;
+        timers_.erase(it);
+        timerPositions_.erase(timer);
+
         timer->Expire();
-        it = timers_.erase(it);
     }
 }
 

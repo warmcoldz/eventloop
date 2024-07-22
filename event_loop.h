@@ -4,6 +4,7 @@
 #include "event_loop_internal_controller.h"
 
 #include <map>
+#include <unordered_map>
 #include <chrono>
 
 namespace event_loop {
@@ -28,7 +29,11 @@ private:
 
 private:
     std::chrono::system_clock::time_point time_;
-    std::multimap<std::chrono::system_clock::time_point /*expirationTime*/, ITimerInternalController*> timers_;
+
+    using TimersTree = std::multimap<std::chrono::system_clock::time_point /*expirationTime*/, ITimerInternalController*>;
+
+    TimersTree timers_;
+    std::unordered_map<ITimerInternalController*, TimersTree::iterator> timerPositions_;
 };
 
 } // namespace event_loop
