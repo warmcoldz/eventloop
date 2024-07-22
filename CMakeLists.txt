@@ -4,10 +4,11 @@ project(turboquic)
 set(CMAKE_CXX_STANDARD 23)
 
 add_library(eventloop
-    event_loop_controller.h
+    event_loop_internal_controller.h
     event_loop.cpp
     event_loop.h
     timer_handler.h
+    timer_internal_controller.h
     timer.cpp
     timer.h
 )
