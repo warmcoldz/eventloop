@@ -12,7 +12,7 @@ class Timer
 public:
     explicit Timer(IEventLoopController& ev);
 
-    void Start(ITimerHandler* const timeHandler, const std::chrono::milliseconds timeout);
+    void Start(ITimerHandler* timeHandler, std::chrono::milliseconds timeout);
     void Stop();
     ITimerHandler* GetTimerHandler() const;
     std::chrono::system_clock::time_point GetExpirationTime() const;

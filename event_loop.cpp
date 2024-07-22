@@ -18,12 +18,13 @@ void EventLoop::Run()
 {
     while (true)
     {
-        CheckTimers();
+        time_ = TimeNow();
+
+        CheckTimersExpired();
         if (!HasTimers())
             break;
 
-        std::this_thread::sleep_until(EarliestExpirationTime());
-        time_ = TimeNow();
+        std::this_thread::sleep_until(EarliestTimerExpirationTime());
     }
 }
 
@@ -32,12 +33,12 @@ std::chrono::system_clock::time_point EventLoop::CurrentTime() const
     return time_;
 }
 
-void EventLoop::AddTimer(Timer* timer)
+void EventLoop::AddTimer(Timer* const timer)
 {
     timers_.emplace(timer->GetExpirationTime(), timer);
 }
 
-void EventLoop::RemoveTimer(Timer* timer)
+void EventLoop::RemoveTimer(Timer* const timer)
 {
     const std::chrono::system_clock::time_point expirationTime = timer->GetExpirationTime();
 
@@ -59,7 +60,7 @@ std::chrono::system_clock::time_point EventLoop::TimeNow()
     return std::chrono::system_clock::now();
 }
 
-void EventLoop::CheckTimers()
+void EventLoop::CheckTimersExpired()
 {
     for (auto it = timers_.begin(); it != timers_.end();)
     {
@@ -77,7 +78,7 @@ bool EventLoop::HasTimers() const
     return !timers_.empty();
 }
 
-std::chrono::system_clock::time_point EventLoop::EarliestExpirationTime() const
+std::chrono::system_clock::time_point EventLoop::EarliestTimerExpirationTime() const
 {
     return timers_.begin()->first;
 }

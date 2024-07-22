@@ -23,9 +23,9 @@ private:
 
 private:
     static std::chrono::system_clock::time_point TimeNow();
-    void CheckTimers();
+    void CheckTimersExpired();
     bool HasTimers() const;
-    std::chrono::system_clock::time_point EarliestExpirationTime() const;
+    std::chrono::system_clock::time_point EarliestTimerExpirationTime() const;
 
 private:
     std::chrono::system_clock::time_point time_;
