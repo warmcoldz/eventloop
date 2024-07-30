@@ -32,10 +32,32 @@ void Timer::Start(const std::chrono::milliseconds timeout)
     AddTimer(timeout);
 }
 
+void Timer::StartPeriodic(std::chrono::milliseconds interval)
+{
+    interval_ = interval;
+    Start(interval);
+}
+
+void Timer::StartPeriodic(std::shared_ptr<ITimerHandler> timerHandler, std::chrono::milliseconds interval)
+{
+    interval_ = interval;
+    Start(timerHandler, interval);
+}
+
+void Timer::Destroy()
+{
+    handler_.reset();
+}
+
 void Timer::Expire()
 {
-    running_ = false;
+    running_ = interval_.has_value();
     handler_->Handle(this);
+
+    if (running_ && interval_.has_value())
+    {
+        AddTimer(*interval_);
+    }
 }
 
 void Timer::Stop()
@@ -44,6 +66,7 @@ void Timer::Stop()
         return;
 
     ev_.RemoveTimer(this);
+    running_ = false;
 }
 
 void Timer::AddTimer(const std::chrono::milliseconds timeout)

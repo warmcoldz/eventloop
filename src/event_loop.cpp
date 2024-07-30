@@ -58,9 +58,12 @@ void EventLoop::AddTimer(ITimerInternalController* const timer)
 
 void EventLoop::RemoveTimer(ITimerInternalController* const timer)
 {
-    auto it = timerPositions_.find(timer);
-    timers_.erase(it->second);
-    timerPositions_.erase(it);
+    const auto it = timerPositions_.find(timer);
+    if (it != timerPositions_.end())
+    {
+        timers_.erase(it->second);
+        timerPositions_.erase(it);
+    }
 }
 
 void EventLoop::CheckTimersExpired()

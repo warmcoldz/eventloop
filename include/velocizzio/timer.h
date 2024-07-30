@@ -6,6 +6,7 @@
 
 #include <chrono>
 #include <memory>
+#include <optional>
 
 namespace velocizzio {
 
@@ -17,7 +18,12 @@ public:
 
     void Start(std::chrono::milliseconds timeout);
     void Start(std::shared_ptr<ITimerHandler> timerHandler, std::chrono::milliseconds timeout);
+
+    void StartPeriodic(std::chrono::milliseconds interval);
+    void StartPeriodic(std::shared_ptr<ITimerHandler> timerHandler, std::chrono::milliseconds interval);
+
     void Stop();
+    void Destroy();
 
 private:
     void Expire() override final;
@@ -30,6 +36,7 @@ private:
     std::shared_ptr<ITimerHandler> handler_{ nullptr };
     bool running_{ false };
     std::chrono::system_clock::time_point expirationTime_;
+    std::optional<std::chrono::milliseconds> interval_;
 };
 
 } // namespace velocizzio
